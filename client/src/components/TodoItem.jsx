@@ -8,7 +8,7 @@ export const TodoItem = ({ todo, index, onToggleComplete, onDelete }) => {
     <li className="flex items-center justify-between px-4 py-3 bg-white rounded-lg shadow-sm transition-all duration-200">
       <div
         className="flex items-center flex-1 cursor-pointer gap-3 min-w-0"
-        onClick={() => onToggleComplete(todo.id)}
+        onClick={onToggleComplete}
       >
         <span className="text-gray-400 w-6 text-right font-medium">
           {index + 1}.
@@ -40,7 +40,7 @@ export const TodoItem = ({ todo, index, onToggleComplete, onDelete }) => {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            navigate(`/todos/${todo.id}/edit`);
+            navigate(`/todos/${todo._id}/edit`);
           }}
           className="flex items-center text-xs px-3 py-1.5 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors duration-200"
         >
@@ -50,7 +50,7 @@ export const TodoItem = ({ todo, index, onToggleComplete, onDelete }) => {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            onDelete(todo.id);
+            onDelete();
           }}
           className="flex items-center text-xs px-3 py-1.5 rounded-md bg-red-50 text-red-600 hover:bg-red-100 transition-colors duration-200"
         >

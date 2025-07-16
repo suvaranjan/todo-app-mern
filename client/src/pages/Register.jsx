@@ -1,27 +1,32 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import api from "../lib/api";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Register() {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+  const { setToken } = useAuth();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitting(true);
 
     const username = e.target.username.value.trim();
     const email = e.target.email.value.trim();
     const password = e.target.password.value.trim();
 
     const newErrors = {};
-
     if (!username) newErrors.username = "Username is required";
-
     if (!email) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = "Invalid email format";
     }
-
     if (!password) {
       newErrors.password = "Password is required";
     } else if (password.length < 6) {
@@ -30,13 +35,26 @@ export default function Register() {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      setSubmitting(false);
       return;
     }
 
     setErrors({});
-    console.log("✅ Valid Registration:", { username, email, password });
 
-    // TODO: call register API
+    try {
+      const res = await api.post("/auth/register", {
+        username,
+        email,
+        password,
+      });
+      setToken(res.data.token);
+      navigate("/todos");
+    } catch (err) {
+      const msg = err.response?.data?.message || "Registration failed";
+      setErrors({ email: msg });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -44,8 +62,8 @@ export default function Register() {
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
         Create Account
       </h2>
+
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Username */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Username
@@ -61,7 +79,6 @@ export default function Register() {
           )}
         </div>
 
-        {/* Email */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Email
@@ -77,7 +94,6 @@ export default function Register() {
           )}
         </div>
 
-        {/* Password with toggle */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Password
@@ -104,12 +120,19 @@ export default function Register() {
 
         <button
           type="submit"
+          disabled={submitting}
           className="w-full bg-blue-600 text-white py-2 rounded-lg transition font-semibold 
              hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-          //   disabled
         >
-          Sign Up
+          {submitting ? "Creating..." : "Sign Up"}
         </button>
+
+        <p className="text-sm text-center text-gray-600 mt-4">
+          Already registered?{" "}
+          <Link to="/auth/login" className="text-blue-600 hover:underline">
+            Login here
+          </Link>
+        </p>
       </form>
     </div>
   );
