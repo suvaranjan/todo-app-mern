@@ -1,12 +1,51 @@
-# React + Vite
+# TODO APP Setup Guide
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project consists of a **client** (frontend) and a **server** (backend). Follow the steps below to configure and run the application locally.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Environment Configuration
 
-## Expanding the ESLint configuration
+### Client `.env` (inside `/client` folder)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Create a `.env` file inside the `client` directory with the following:
+
+```env
+VITE_API_URL
+```
+
+### Server `.env` (inside `/server` folder)
+
+Create a `.env` file inside the `server` directory with the following:
+
+```env
+PORT=
+MONGO_URI=
+JWT_SECRET=
+```
+
+---
+
+## Installation & Development
+
+### Start the Client
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+### Start the Server
+
+```bash
+cd server
+npm install
+npm run devStart
+```
+
+---
+
+## You're all set!
+
+Make sure all environment variables are correctly filled out for full functionality.
